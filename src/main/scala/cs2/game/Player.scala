@@ -19,13 +19,17 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  
    *  @return none/Unit
    */
-  def moveLeft() { }
+  def moveLeft() {
+    this.move(new Vec2(-10.0, 0.0))  
+  }
   
   /** moves the player sprite one "step" to the right (see note above)
    * 
    *  @return none/Unit
    */
-  def moveRight() { }
+  def moveRight() {
+    this.move(new Vec2(10.0, 0.0))
+  }
   
   /** creates a new Bullet instance beginning from the player, with an 
    *  appropriate velocity
@@ -33,5 +37,5 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return Bullet - the newly created Bullet object that was fired
    */
   def shoot():Bullet = { null }
-  
+  def show() = this.initPos.x
 }
