@@ -2,6 +2,9 @@ package cs2.game
 
 import scalafx.scene.image.Image
 import cs2.util.Vec2
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Particle
+import scala.collection.mutable.Buffer
+import cs2.util.Vec2
 
 /** Representation of a bullet/projectile for a simple game based on sprites.
  *  Handles all information regarding a bullet's position, movements, and 
@@ -17,6 +20,8 @@ class Bullet(pic:Image, initPos:Vec2, private var vel:Vec2) extends Sprite(pic, 
    * 
    *  @return none/Unit
    */
-	def timeStep() { }
-  
+    
+	def timeStep() {
+	  initPos += vel
+	}
 }

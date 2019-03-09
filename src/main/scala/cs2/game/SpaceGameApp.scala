@@ -9,6 +9,8 @@ import scalafx.animation.AnimationTimer
 import scalafx.scene.input.KeyEvent
 import scalafx.scene.input.KeyCode
 import scalafx.Includes._
+import scalafx.scene.paint.Color
+import scala.collection.mutable.Buffer
 
 
 /** main object that initiates the execution of the game, including construction
@@ -20,25 +22,55 @@ object SpaceGameApp extends JFXApp {
   
   stage = new JFXApp.PrimaryStage {
     title = "SPACE"
-    private val img = new Image("file:player2.png")
+    val img = new Image("file:player2.png")
     scene = new Scene(800, 600) {
       val canvas = new Canvas(800, 600)
       val g = canvas.graphicsContext2D
       content = canvas
+      g.fill = Color.Black
+      g.fillRect(0,0, 800,600)
+      
+      var bullets = Buffer[Bullet]()
+      
       var player = new Player(img, new Vec2(384.5, 500), img)
       player.display(g)
+            
       onKeyPressed = (e:KeyEvent) => {
         if(e.code == KeyCode.A) {
           player.moveLeft()
-          printf(player.show.toString)
+          printf(player.show.toString + "\n"  )
           player.display(g)
         }
         if(e.code == KeyCode.D) {
           player.moveRight()
-          printf(player.show.toString())
+          printf(player.show.toString + "\n")
           player.display(g)
         }
+        if(e.code == KeyCode.Space) {
+          player.shoot()
+          bullets += new Bullet(img, new Vec2(384.5, 500), new Vec2())
+          
+        }
       }
+      
+      var swarm = new EnemySwarm(2, 10)
+      swarm.display(g)
+      
+      //var bullets = Buffer[Bullet]()
+      
+      
+      var prevT:Long = 0L
+      val timer = AnimationTimer(t => {
+        if(t - prevT > 1e9/60) {
+          prevT = t
+          
+          for (sys <- bullets) {
+            sys.display(g)
+            sys.timeStep()
+          }
+        }
+      })
+      timer.start
     }
   }
 }
