@@ -39,9 +39,9 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
    *  @return Bullet - the newly created Bullet object fired from the swarm
    */
   def shoot():Bullet = {
-    val random = new scala.util.Random
+    var random = new scala.util.Random
     var ind = random.nextInt(nRows * nCols)
-    enemies(ind).shoot
+      enemies(ind).shoot
   }
   
 }
