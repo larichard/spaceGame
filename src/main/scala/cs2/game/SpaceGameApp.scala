@@ -35,25 +35,19 @@ object SpaceGameApp extends JFXApp {
       val g = canvas.graphicsContext2D
       content = canvas
       g.fill = Color.Black
-      g.fillRect(0,0, 800,600)
+      //g.fillRect(0,0, 800,600)
       
       onKeyPressed = (e:KeyEvent) => {
         if(e.code == KeyCode.A) {
           lefttouch = true
-          //g.fillRect(0,500, 800,600)
-          //player.moveLeft()
-          //printf(player.showPos.toString + "\n")
-          //player.display(g)
         }
         if(e.code == KeyCode.D) {
           righttouch = true
-          //g.fillRect(0,500, 800,600)
-          //player.moveRight()
-          //printf(player.showPos.toString + "\n")
-          //player.display(g)
         }
         if(e.code == KeyCode.Space) {
-          bullets += player.shoot()   
+          bullets += player.shoot
+          var f = player.speed
+          player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
         }
       }
       
@@ -77,17 +71,16 @@ object SpaceGameApp extends JFXApp {
           player.display(g)
           swarm.display(g)
           bullets += swarm.shoot()
+          swarm = new EnemySwarm(2,10)
           bullets.foreach(_.display(g))
-          bullets.foreach(_.timeStep())
+          bullets.foreach(_.timeStep)
           
           if (lefttouch) {
-            g.fillRect(0,500, 800,600)
             player.moveLeft()
             printf(player.showPos.toString + "\n"  )
             player.display(g)
           }
           if (righttouch) {
-            g.fillRect(0,500, 800,600)
             player.moveRight()
             printf(player.showPos.toString + "\n")
             player.display(g)

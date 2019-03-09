@@ -2,7 +2,6 @@ package cs2.game
 
 import scalafx.scene.image.Image
 import cs2.util.Vec2
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Particle
 import scala.collection.mutable.Buffer
 import cs2.util.Vec2
 
@@ -22,6 +21,7 @@ class Bullet(pic:Image, initPos:Vec2, private var vel:Vec2) extends Sprite(pic, 
    */
     
 	def timeStep():Unit = {
-	  initPos.y += vel.y
+	  initPos += vel
+	  //new Bullet(pic, initPos + vel, vel)
 	}
 }

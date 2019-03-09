@@ -40,7 +40,7 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
    */
   def shoot():Bullet = {
     val random = new scala.util.Random
-    var ind = random.nextInt(nRows * nCols) 
+    var ind = random.nextInt(nRows * nCols)
     enemies(ind).shoot
   }
   
