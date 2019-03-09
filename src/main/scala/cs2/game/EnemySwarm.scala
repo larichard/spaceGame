@@ -18,18 +18,19 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
 	 *  @param g - the GraphicsContext to draw into
 	 *  @return none/Unit
 	 */
+  val bulletimg = new Image("file:bullet.png")
   val img = new Image("file:enemy.png")
   var enemies = Buffer[Enemy]()
   for(row <- 0 until nRows) {
     for(col <- 0 until nCols) {
       var initPos = new Vec2(15 + (800/nCols * col),15 + (100 * row))
-      val b = new Enemy(img, initPos, img)
+      val b = new Enemy(img, initPos, bulletimg)
       enemies += b
     }
   }
-  	def display(g:GraphicsContext) {
-      enemies.foreach(_.display(g))
-  	}
+  def display(g:GraphicsContext) {
+    enemies.foreach(_.display(g))
+  }
   
   /** overridden method of ShootsBullets. Creates a single, new bullet instance 
    *  originating from a random enemy in the swarm. (Not a bullet from every 
@@ -37,6 +38,10 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
    *  
    *  @return Bullet - the newly created Bullet object fired from the swarm
    */
-  def shoot():Bullet = { ??? }
+  def shoot():Bullet = {
+    val random = new scala.util.Random
+    var ind = random.nextInt(nRows * nCols) 
+    enemies(ind).shoot
+  }
   
 }

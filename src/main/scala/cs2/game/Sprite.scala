@@ -28,8 +28,7 @@ abstract class Sprite (protected val img:Image, protected var pos:Vec2) {
    *  @return none/Unit
    */
   def moveTo (location:Vec2) {
-    pos.x = location.x
-    pos.y = location.y
+    pos = location  
   }
   
   /** Method to display the sprite at its current location in the specified Graphics2D context
