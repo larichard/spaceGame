@@ -23,6 +23,7 @@ object SpaceGameApp extends JFXApp {
   stage = new JFXApp.PrimaryStage {
     title = "SPACE"
     val img = new Image("file:player2.png")
+    val bulletimg = new Image("file:enemy.png")
     scene = new Scene(800, 600) {
       val canvas = new Canvas(800, 600)
       val g = canvas.graphicsContext2D
@@ -32,32 +33,29 @@ object SpaceGameApp extends JFXApp {
       
       var bullets = Buffer[Bullet]()
       
-      var player = new Player(img, new Vec2(384.5, 500), img)
+      var player = new Player(img, new Vec2(384.5, 500), bulletimg)
       player.display(g)
             
       onKeyPressed = (e:KeyEvent) => {
         if(e.code == KeyCode.A) {
+          g.fillRect(0,500, 800,600)
           player.moveLeft()
           printf(player.show.toString + "\n"  )
           player.display(g)
         }
         if(e.code == KeyCode.D) {
+          g.fillRect(0,500, 800,600)
           player.moveRight()
           printf(player.show.toString + "\n")
           player.display(g)
         }
         if(e.code == KeyCode.Space) {
-          player.shoot()
-          bullets += new Bullet(img, new Vec2(384.5, 500), new Vec2())
-          
+          bullets += player.shoot()   
         }
       }
       
       var swarm = new EnemySwarm(2, 10)
-      swarm.display(g)
-      
-      //var bullets = Buffer[Bullet]()
-      
+      swarm.display(g)      
       
       var prevT:Long = 0L
       val timer = AnimationTimer(t => {
@@ -68,6 +66,8 @@ object SpaceGameApp extends JFXApp {
             sys.display(g)
             sys.timeStep()
           }
+          
+          
         }
       })
       timer.start
