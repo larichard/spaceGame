@@ -24,6 +24,8 @@ object SpaceGameApp extends JFXApp {
   val bulletimg = new Image("file:bullet.png")
   var lefttouch = false
   var righttouch = false
+  var uptouch = false
+  var downtouch = false
   var bullets = Buffer[Bullet]()
   var player = new Player(img, new Vec2(470,1000), bulletimg)
   var swarm = new EnemySwarm(4, 10)
@@ -44,6 +46,12 @@ object SpaceGameApp extends JFXApp {
         if(e.code == KeyCode.D) {
           righttouch = true
         }
+        if(e.code == KeyCode.W) {
+          uptouch = true
+        }
+        if(e.code == KeyCode.S) {
+          downtouch = true
+        }
         if(e.code == KeyCode.Space) {
           bullets += player.shoot
           var f = player.speed
@@ -57,6 +65,12 @@ object SpaceGameApp extends JFXApp {
         }
         if(e.code == KeyCode.D) {
           righttouch = false
+        }
+        if(e.code == KeyCode.W) {
+          uptouch = false
+        }
+        if(e.code == KeyCode.S) {
+          downtouch = false
         }
       }
             
@@ -87,6 +101,16 @@ object SpaceGameApp extends JFXApp {
           }
           if (righttouch) {
             player.moveRight()
+            printf(player.showPos.toString + "\n")
+            player.display(g)
+          }
+          if (uptouch) {
+            player.moveUp()
+            printf(player.showPos.toString + "\n")
+            player.display(g)
+          }
+          if (downtouch) {
+            player.moveDown()
             printf(player.showPos.toString + "\n")
             player.display(g)
           }

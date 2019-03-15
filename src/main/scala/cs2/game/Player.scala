@@ -38,10 +38,16 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return Bullet - the newly created Bullet object that was fired
    */
   
-  // ?????????????????????????????????????????
+  def moveUp() {
+    this.move(new Vec2(0.0, -speed))
+  }
+  
+  def moveDown() {
+    this.move(new Vec2(0.0, speed))
+  }
+  
   def shoot():Bullet = {
     new Bullet(bulletPic, new Vec2(initPos.x+ 20.5, initPos.y), new Vec2(0, -10))
-    //new Bullet(bulletPic, initPos, new Vec2(0,0))
   }
   
   def showPos() = this.initPos
