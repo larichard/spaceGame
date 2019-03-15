@@ -18,9 +18,7 @@ class Sprite (protected val img:Image, protected var pos:Vec2) {
    */ 
   
   def move (direction:Vec2) {
-    //while(pos.x <= 800 && pos.y <= 600) {
-      pos += direction 
-    //}
+    pos += direction 
   }
   /** moves the sprite to a specific location specified by a vector (not a relative movement)
    *  

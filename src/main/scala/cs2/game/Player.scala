@@ -13,15 +13,19 @@ import cs2.util.Vec2
 class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image) 
                 extends Sprite(avatar, initPos) with ShootsBullets {
 
+  val speed = 8
+
   /** moves the player sprite one "step" to the left.  The amount of this 
    *  movement will likely need to be tweaked in order for the movement to feel 
    *  natural.
    *  
    *  @return none/Unit
    */
-  val speed = 8
   def moveLeft() {
-    this.move(new Vec2(-speed, 0.0))  
+    if(this.initPos.x < 0) {
+      moveRight
+    }
+    this.move(new Vec2(-speed, 0.0))
   }
   
   /** moves the player sprite one "step" to the right (see note above)
@@ -29,6 +33,9 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return none/Unit
    */
   def moveRight() {
+    if(this.initPos.x > 1000 - 61) {
+      moveLeft
+    }
     this.move(new Vec2(speed, 0.0))
   }
   
@@ -39,10 +46,16 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    */
   
   def moveUp() {
+    if(this.initPos.y < 5) {
+      moveDown
+    }
     this.move(new Vec2(0.0, -speed))
   }
   
   def moveDown() {
+    if(this.initPos.y > 1080 - 80) {
+      moveUp
+    }
     this.move(new Vec2(0.0, speed))
   }
   
