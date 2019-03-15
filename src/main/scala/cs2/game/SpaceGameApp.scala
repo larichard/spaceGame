@@ -25,14 +25,13 @@ object SpaceGameApp extends JFXApp {
   var lefttouch = false
   var righttouch = false
   var bullets = Buffer[Bullet]()
-  var player = new Player(img, new Vec2(384.5, 540), bulletimg)
-  var swarm = new EnemySwarm(2, 10)
-  var random = new scala.util.Random
+  var player = new Player(img, new Vec2(470,1000), bulletimg)
+  var swarm = new EnemySwarm(4, 10)
 
   stage = new JFXApp.PrimaryStage {
     title = "SPACE"
-    scene = new Scene(800, 600) {
-      val canvas = new Canvas(800, 600)
+    scene = new Scene(1000, 1080) {
+      val canvas = new Canvas(1000, 1080)
       val g = canvas.graphicsContext2D
       content = canvas
       g.fill = Color.Black
@@ -68,7 +67,7 @@ object SpaceGameApp extends JFXApp {
           val interval = (time - lastTime) / 1e9
           lastTime = time
           
-          g.fillRect(0,0, 800,600)
+          g.fillRect(0,0, 1000,1080)
           player.display(g)
           swarm.display(g)
           
@@ -76,7 +75,7 @@ object SpaceGameApp extends JFXApp {
           if (times < 0.05) {
           bullets += swarm.shoot()
           }
-          swarm = new EnemySwarm(2,10)
+          swarm = new EnemySwarm(4,10)
           
           bullets.foreach(_.display(g))
           bullets.foreach(_.timeStep)

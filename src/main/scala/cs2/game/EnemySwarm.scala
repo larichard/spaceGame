@@ -13,21 +13,25 @@ import scala.collection.mutable.Buffer
  *  @param nCols - number of columns of enemy objects
  */
 class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBullets {
-	/** method to display all Enemy objects contained within this EnemySwarm
-	 * 
-	 *  @param g - the GraphicsContext to draw into
-	 *  @return none/Unit
-	 */
+	
   val bulletimg = new Image("file:bullet.png")
   val img = new Image("file:enemy.png")
   var enemies = Buffer[Enemy]()
   for(row <- 0 until nRows) {
     for(col <- 0 until nCols) {
-      var initPos = new Vec2(15 + (800/nCols * col),15 + (100 * row))
-      val b = new Enemy(img, initPos, bulletimg)
+      var initPos = new Vec2(25 + (1000/nCols * col),15 + (500/nRows * row))
+      var b = new Enemy(img, initPos, bulletimg)
       enemies += b
     }
   }
+  
+  /** method to display all Enemy objects contained within this EnemySwarm
+	 * 
+	 *  @param g - the GraphicsContext to draw into
+	 *  @return none/Unit
+	 */
+  
+  
   def display(g:GraphicsContext) {
     enemies.foreach(_.display(g))
   }
@@ -41,7 +45,7 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
   def shoot():Bullet = {
     var random = new scala.util.Random
     var ind = random.nextInt(nRows * nCols)
-      enemies(ind).shoot
+    enemies(ind).shoot
   }
   
 }

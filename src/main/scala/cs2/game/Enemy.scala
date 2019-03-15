@@ -18,7 +18,7 @@ class Enemy(pic:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return Bullet - the newly created Bullet object that was fired
    */
   def shoot():Bullet = {
-    new Bullet(bulletPic, initPos, new Vec2(0.0, 10.0))
+    new Bullet(bulletPic, new Vec2(initPos.x+15, initPos.y+50), new Vec2(0.0, 10.0))
     //new Bullet(bulletPic, initPos, new Vec2(0,0))
   }
   
