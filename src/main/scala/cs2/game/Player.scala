@@ -60,7 +60,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
   }
   
   def shoot():Bullet = {
-    new Bullet(bulletPic, new Vec2(initPos.x+ 20.5, initPos.y), new Vec2(0, -10))
+    new Bullet(bulletPic, new Vec2(initPos.x+ 20.5, initPos.y - 20), new Vec2(0, -10))
   }
   
   def showPos() = this.initPos

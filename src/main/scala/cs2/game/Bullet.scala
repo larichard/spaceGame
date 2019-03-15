@@ -24,4 +24,8 @@ class Bullet(pic:Image, initPos:Vec2, private var vel:Vec2) extends Sprite(pic, 
 	  initPos += vel
 	  //new Bullet(pic, initPos + vel, vel)
 	}
+	
+	def returnPos = {
+	  initPos
+	}
 }

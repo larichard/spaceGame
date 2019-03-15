@@ -22,10 +22,12 @@ object SpaceGameApp extends JFXApp {
   
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
+  
   var lefttouch = false
   var righttouch = false
   var uptouch = false
   var downtouch = false
+  
   var bullets = Buffer[Bullet]()
   var player = new Player(img, new Vec2(470,1000), bulletimg)
   var swarm = new EnemySwarm(4, 10)
@@ -89,11 +91,31 @@ object SpaceGameApp extends JFXApp {
           if (times < 0.05) {
           bullets += swarm.shoot()
           }
-          swarm = new EnemySwarm(4,10)
+          //swarm = new EnemySwarm(4,10)
           
           bullets.foreach(_.display(g))
           bullets.foreach(_.timeStep)
           
+          for(i <- 0 until bullets.length) {
+            if(bullets(i).returnPos.y > 1100 || bullets(i).returnPos.y < -100) {
+              bullets -= bullets(i)
+            }
+          }
+          
+          for(i <- 0 until bullets.length) {
+            if(bullets(i).returnPos.y + 20 > player.showPos.y && bullets(i).returnPos.y < player.showPos.y + 48 && 
+               bullets(i).returnPos.x + 20 > player.showPos.x && bullets(i).returnPos.x < player.showPos.x + 61) {
+              bullets -= bullets(i)
+              player = new Player(img, new Vec2(470,1000), bulletimg)
+            }
+          }
+          
+          /*for(j <- 0 until bullets.length) {
+            if(bullets(j).intersection(player) == new Vec2(0,0))
+              player = new Player(img, new Vec2(470,1000), bulletimg)
+          }
+          */
+
           if (lefttouch) {
             player.moveLeft()
             printf(player.showPos.toString + "\n")
