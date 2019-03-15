@@ -98,12 +98,14 @@ object SpaceGameApp extends JFXApp {
           enemybullets.foreach(_.timeStep)
           playerbullets.foreach(_.timeStep)
           
+          //remove bullets offscreen
           for(i <- 0 until enemybullets.length) {
             if(enemybullets(i).returnPos.y > 1100 || enemybullets(i).returnPos.y < -100) {
               enemybullets -= enemybullets(i)
             }
           }
           
+          //enemybullets/player collision
           for(i <- 0 until enemybullets.length) {
             if(enemybullets(i).returnPos.y + 20 > player.showPos.y && enemybullets(i).returnPos.y < player.showPos.y + 48 && 
                enemybullets(i).returnPos.x + 20 > player.showPos.x && enemybullets(i).returnPos.x < player.showPos.x + 61) 
@@ -115,6 +117,7 @@ object SpaceGameApp extends JFXApp {
             }
           }
           
+          //playerbullets/enemy collision
           for(j <- 0 until playerbullets.length) {
             for(i <- 0 until swarm.enemies.length) {
               if(playerbullets(j).returnPos.y + 20 > swarm.enemies(i).showPos.y && playerbullets(j).returnPos.y < swarm.enemies(i).showPos.y + 50 && 
@@ -125,12 +128,30 @@ object SpaceGameApp extends JFXApp {
               }
             }
           }
-            
-          /*for(j <- 0 until bullets.length) {
-            if(bullets(j).intersection(player) == new Vec2(0,0))
+          
+          //player/enemy collision
+          for(i <- 0 until swarm.enemies.length) {
+            if(swarm.enemies(i).showPos.x + 50 > player.showPos.x && swarm.enemies(i).showPos.x < player.showPos.x + 48 &&
+               swarm.enemies(i).showPos.y + 50 > player.showPos.y && swarm.enemies(i).showPos.y < player.showPos.y + 61)
+            {
               player = new Player(img, new Vec2(470,1000), bulletimg)
+              enemybullets = Buffer[Bullet]()
+              playerbullets = Buffer[Bullet]()
+              swarm = new EnemySwarm(4, 10)
+            }
           }
-          */
+          
+          //playerbullet/enemybullet collision
+          for(i <- 0 until enemybullets.length) {
+            for(j <- 0 until playerbullets.length) {
+              if(enemybullets(i).returnPos.x + 20 > playerbullets(j).returnPos.x && enemybullets(i).returnPos.x < playerbullets(j).returnPos.x + 20 &&
+                 enemybullets(i).returnPos.y + 20 > playerbullets(j).returnPos.y && enemybullets(i).returnPos.y < playerbullets(j).returnPos.y + 20)
+              {
+                enemybullets -= enemybullets(i)
+                playerbullets -= playerbullets(j)
+              }
+            }
+          }
           
           if (lefttouch) {
             player.moveLeft()
