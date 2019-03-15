@@ -28,7 +28,8 @@ object SpaceGameApp extends JFXApp {
   var uptouch = false
   var downtouch = false
   
-  var bullets = Buffer[Bullet]()
+  var enemybullets = Buffer[Bullet]()
+  var playerbullets = Buffer[Bullet]()
   var player = new Player(img, new Vec2(470,1000), bulletimg)
   var swarm = new EnemySwarm(4, 10)
 
@@ -55,8 +56,7 @@ object SpaceGameApp extends JFXApp {
           downtouch = true
         }
         if(e.code == KeyCode.Space) {
-          bullets += player.shoot
-          var f = player.speed
+          playerbullets += player.shoot
           player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
         }
       }
@@ -89,33 +89,49 @@ object SpaceGameApp extends JFXApp {
           
           val times = math.random()
           if (times < 0.05) {
-          bullets += swarm.shoot()
+          enemybullets += swarm.shoot()
           }
           //swarm = new EnemySwarm(4,10)
           
-          bullets.foreach(_.display(g))
-          bullets.foreach(_.timeStep)
+          enemybullets.foreach(_.display(g))
+          playerbullets.foreach(_.display(g))
+          enemybullets.foreach(_.timeStep)
+          playerbullets.foreach(_.timeStep)
           
-          for(i <- 0 until bullets.length) {
-            if(bullets(i).returnPos.y > 1100 || bullets(i).returnPos.y < -100) {
-              bullets -= bullets(i)
+          for(i <- 0 until enemybullets.length) {
+            if(enemybullets(i).returnPos.y > 1100 || enemybullets(i).returnPos.y < -100) {
+              enemybullets -= enemybullets(i)
             }
           }
           
-          for(i <- 0 until bullets.length) {
-            if(bullets(i).returnPos.y + 20 > player.showPos.y && bullets(i).returnPos.y < player.showPos.y + 48 && 
-               bullets(i).returnPos.x + 20 > player.showPos.x && bullets(i).returnPos.x < player.showPos.x + 61) {
-              bullets -= bullets(i)
+          for(i <- 0 until enemybullets.length) {
+            if(enemybullets(i).returnPos.y + 20 > player.showPos.y && enemybullets(i).returnPos.y < player.showPos.y + 48 && 
+               enemybullets(i).returnPos.x + 20 > player.showPos.x && enemybullets(i).returnPos.x < player.showPos.x + 61) 
+            {
               player = new Player(img, new Vec2(470,1000), bulletimg)
+              enemybullets = Buffer[Bullet]()
+              playerbullets = Buffer[Bullet]()
+              swarm = new EnemySwarm(4, 10)
             }
           }
           
+          for(j <- 0 until playerbullets.length) {
+            for(i <- 0 until swarm.enemies.length) {
+              if(playerbullets(j).returnPos.y + 20 > swarm.enemies(i).showPos.y && playerbullets(j).returnPos.y < swarm.enemies(i).showPos.y + 50 && 
+                 playerbullets(j).returnPos.x + 20 > swarm.enemies(i).showPos.x && playerbullets(j).returnPos.x < swarm.enemies(i).showPos.x + 50)
+              {
+                swarm.enemies -= swarm.enemies(i)
+                playerbullets -= playerbullets(j)
+              }
+            }
+          }
+            
           /*for(j <- 0 until bullets.length) {
             if(bullets(j).intersection(player) == new Vec2(0,0))
               player = new Player(img, new Vec2(470,1000), bulletimg)
           }
           */
-
+          
           if (lefttouch) {
             player.moveLeft()
             printf(player.showPos.toString + "\n")

@@ -40,6 +40,7 @@ class Sprite (protected val img:Image, protected var pos:Vec2) {
   
   /*def intersection (objectthattouchesthis:Sprite) {
     this.pos - objectthattouchesthis.pos
-  }*/
+  }
+  */
   
 }
