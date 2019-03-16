@@ -13,8 +13,6 @@ import scalafx.scene.paint.Color
 import scala.collection.mutable.Buffer
 import scala.concurrent.duration._
 import java.util.Calendar
-import scalafx.scene.control.Alert
-import scalafx.scene.control.Alert.AlertType
 
 /** main object that initiates the execution of the game, including construction
  *  of the window.
@@ -25,6 +23,7 @@ object SpaceGameApp extends JFXApp {
   
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
+  val backgroundimg_jk = new Image("file:background_jk.png")
   
   val shotMax = 3
   var shotAlready = 0
@@ -55,7 +54,6 @@ object SpaceGameApp extends JFXApp {
       val canvas = new Canvas(1000, 1080)
       val g = canvas.graphicsContext2D
       content = canvas
-      g.fill = Color.Black
       
       onKeyPressed = (e:KeyEvent) => {
         if(e.code == KeyCode.A) {
@@ -116,6 +114,7 @@ object SpaceGameApp extends JFXApp {
           enemybullets.foreach(_.timeStep)
           playerbullets.foreach(_.timeStep)
           
+          //non-trivial movement for enemy swarm
           for(i <- 0 until swarm.enemies.length) {
             val enemydir = math.random()
             if (enemydir < 0.5) {
@@ -156,9 +155,11 @@ object SpaceGameApp extends JFXApp {
           
           //stop game when player loses all lives
           if (gameOver) {
+            g.drawImage(backgroundimg_jk, 0, 0)
+            g.fill = Color.Black
             g.fillText("GAME OVER", 450, 540, 100)
             g.fillText("FINAL SCORE: " + score.toString, 450, 580, 100)
-            g.fillText("RESTART APP TO PLAY AGAIN",450, 620)
+            g.fillText("RESTART APP TO TRY AGAIN", 450, 620)
             timer.stop
           }
           
