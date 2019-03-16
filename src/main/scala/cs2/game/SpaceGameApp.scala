@@ -11,7 +11,8 @@ import scalafx.scene.input.KeyCode
 import scalafx.Includes._
 import scalafx.scene.paint.Color
 import scala.collection.mutable.Buffer
-
+import scala.concurrent.duration._
+import java.util.Calendar
 
 /** main object that initiates the execution of the game, including construction
  *  of the window.
@@ -23,6 +24,17 @@ object SpaceGameApp extends JFXApp {
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
   
+  var now = Calendar.getInstance()
+  var currentSecond = now.get(Calendar.SECOND)
+  var next = Calendar.getInstance()
+  var nextSecond = next.get(Calendar.SECOND)
+  val shotPerSecond = 2
+  var shotNum = 0
+  
+  var playerLives = 3
+  var score = 0
+  var wavesCleared = 1
+  
   var lefttouch = false
   var righttouch = false
   var uptouch = false
@@ -31,7 +43,7 @@ object SpaceGameApp extends JFXApp {
   var enemybullets = Buffer[Bullet]()
   var playerbullets = Buffer[Bullet]()
   var player = new Player(img, new Vec2(470,1000), bulletimg)
-  var swarm = new EnemySwarm(4, 10)
+  var swarm = new EnemySwarm(3, 10)
 
   stage = new JFXApp.PrimaryStage {
     title = "SPACE"
@@ -40,7 +52,6 @@ object SpaceGameApp extends JFXApp {
       val g = canvas.graphicsContext2D
       content = canvas
       g.fill = Color.Black
-      //g.fillRect(0,0, 800,600)
       
       onKeyPressed = (e:KeyEvent) => {
         if(e.code == KeyCode.A) {
@@ -56,6 +67,7 @@ object SpaceGameApp extends JFXApp {
           downtouch = true
         }
         if(e.code == KeyCode.Space) {
+          //var nextSecond = currentSecond
           playerbullets += player.shoot
           player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
         }
@@ -83,15 +95,37 @@ object SpaceGameApp extends JFXApp {
           val interval = (time - lastTime) / 1e9
           lastTime = time
           
+          //var now = Calendar.getInstance()
+          //var currentSecond = now.get(Calendar.SECOND)
+          
+          g.fill = Color.Black
           g.fillRect(0,0, 1000,1080)
+          
+          g.fill = Color.White
+          g.fillText("LIVES: " + playerLives.toString, 10, 20)
+          g.fillText("SCORE: " + score.toString, 10, 40)
+          if(playerLives <= 0) {
+            g.fillText("GAME OVER", 450, 540, 100)
+            lefttouch = false
+            righttouch = false
+            uptouch = false
+            downtouch = false
+          }
+          
           player.display(g)
           swarm.display(g)
           
           val times = math.random()
           if (times < 0.05) {
-          enemybullets += swarm.shoot()
+            enemybullets += swarm.shoot()
           }
-          //swarm = new EnemySwarm(4,10)
+          
+          //reset when all enemies removed
+          if(swarm.enemies.length == 0) {
+            swarm = new EnemySwarm(3, 10) 
+            score += (1000 * wavesCleared)
+            wavesCleared += 1
+          }
           
           enemybullets.foreach(_.display(g))
           playerbullets.foreach(_.display(g))
@@ -113,7 +147,7 @@ object SpaceGameApp extends JFXApp {
               player = new Player(img, new Vec2(470,1000), bulletimg)
               enemybullets = Buffer[Bullet]()
               playerbullets = Buffer[Bullet]()
-              swarm = new EnemySwarm(4, 10)
+              playerLives -= 1
             }
           }
           
@@ -125,6 +159,7 @@ object SpaceGameApp extends JFXApp {
               {
                 swarm.enemies -= swarm.enemies(i)
                 playerbullets -= playerbullets(j)
+                score += (10 * wavesCleared)
               }
             }
           }
@@ -137,7 +172,7 @@ object SpaceGameApp extends JFXApp {
               player = new Player(img, new Vec2(470,1000), bulletimg)
               enemybullets = Buffer[Bullet]()
               playerbullets = Buffer[Bullet]()
-              swarm = new EnemySwarm(4, 10)
+              playerLives -= 1
             }
           }
           
@@ -165,6 +200,8 @@ object SpaceGameApp extends JFXApp {
           }
           if (uptouch) {
             player.moveUp()
+            //println(currentSecond)
+            //println(nextSecond)
             printf(player.showPos.toString + "\n")
             player.display(g)
           }

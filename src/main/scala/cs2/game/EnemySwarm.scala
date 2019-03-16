@@ -19,7 +19,7 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
   var enemies = Buffer[Enemy]()
   for(row <- 0 until nRows) {
     for(col <- 0 until nCols) {
-      var initPos = new Vec2(25 + (1000/nCols * col),15 + (500/nRows * row))
+      var initPos = new Vec2(25 + (1000/nCols * col),50 + (400/nRows * row))
       var b = new Enemy(img, initPos, bulletimg)
       enemies += b
     }

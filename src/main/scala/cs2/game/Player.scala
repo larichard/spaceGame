@@ -14,7 +14,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
                 extends Sprite(avatar, initPos) with ShootsBullets {
 
   val speed = 8
-
+  
   /** moves the player sprite one "step" to the left.  The amount of this 
    *  movement will likely need to be tweaked in order for the movement to feel 
    *  natural.
@@ -62,6 +62,6 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
   def shoot():Bullet = {
     new Bullet(bulletPic, new Vec2(initPos.x+ 20.5, initPos.y - 20), new Vec2(0, -8))
   }
-  
+    
   def showPos() = this.initPos
 }
