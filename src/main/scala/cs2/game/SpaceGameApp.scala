@@ -26,12 +26,9 @@ object SpaceGameApp extends JFXApp {
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
   
-  //var now = Calendar.getInstance()
-  //var currentSecond = now.get(Calendar.SECOND)
-  //var next = Calendar.getInstance()
-  //var nextSecond = next.get(Calendar.SECOND)
-  val shotPerSecond = 2
-  var shotNum = 0
+  val shotMax = 3
+  var shotAlready = 0
+  var shotCooldown = 1.0
   
   var playerLives = 3
   var score = 0
@@ -43,6 +40,7 @@ object SpaceGameApp extends JFXApp {
   var righttouch = false
   var uptouch = false
   var downtouch = false
+  var spacetouch = false
   
   var enemybullets = Buffer[Bullet]()
   var playerbullets = Buffer[Bullet]()
@@ -71,8 +69,11 @@ object SpaceGameApp extends JFXApp {
           downtouch = true
         }
         if(e.code == KeyCode.Space) {
-          playerbullets += player.shoot
-          player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+          if(shotCooldown > 0 && shotAlready < shotMax) {
+            playerbullets += player.shoot
+            player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            shotAlready += 1
+          }
         }
       }
       
@@ -104,6 +105,7 @@ object SpaceGameApp extends JFXApp {
           g.fill = Color.White
           g.fillText("LIVES: " + playerLives.toString, 10, 20)
           g.fillText("SCORE: " + score.toString, 10, 40)
+          g.fillText("WAVE: " + wavesCleared.toString, 940, 20, 60)
                     
           player.display(g)
           swarm.display(g)
@@ -113,6 +115,14 @@ object SpaceGameApp extends JFXApp {
             enemybullets += swarm.shoot()
           }
           
+          //tracks playershots per second
+          shotCooldown -= interval
+          if(shotCooldown <= 0) {
+            shotCooldown = 1.0
+            shotAlready = 0
+          }
+          
+          //tracks playerlives
           if(playerLives == 0) {
             gameOver = true
           }
@@ -204,8 +214,6 @@ object SpaceGameApp extends JFXApp {
           }
           if (uptouch) {
             player.moveUp()
-            //println(currentSecond)
-            //println(nextSecond)
             printf(player.showPos.toString + "\n")
             player.display(g)
           }
@@ -214,6 +222,7 @@ object SpaceGameApp extends JFXApp {
             printf(player.showPos.toString + "\n")
             player.display(g)
           }
+          
         }
       })
       timer.start
