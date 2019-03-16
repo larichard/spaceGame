@@ -24,6 +24,7 @@ object SpaceGameApp extends JFXApp {
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
   val backgroundimg_jk = new Image("file:background_jk.png")
+  val endscreenimg2 = new Image("file:endscreen2.png")
   
   val shotMax = 3
   var shotAlready = 0
@@ -156,6 +157,7 @@ object SpaceGameApp extends JFXApp {
           //stop game when player loses all lives
           if (gameOver) {
             g.drawImage(backgroundimg_jk, 0, 0)
+            g.drawImage(endscreenimg2, 1000/2 - 400/2, 0)
             g.fill = Color.Black
             g.fillText("GAME OVER", 450, 540, 100)
             g.fillText("FINAL SCORE: " + score.toString, 450, 580, 100)
