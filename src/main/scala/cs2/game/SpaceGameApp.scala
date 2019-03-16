@@ -13,6 +13,8 @@ import scalafx.scene.paint.Color
 import scala.collection.mutable.Buffer
 import scala.concurrent.duration._
 import java.util.Calendar
+import scalafx.scene.control.Alert
+import scalafx.scene.control.Alert.AlertType
 
 /** main object that initiates the execution of the game, including construction
  *  of the window.
@@ -24,16 +26,18 @@ object SpaceGameApp extends JFXApp {
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
   
-  var now = Calendar.getInstance()
-  var currentSecond = now.get(Calendar.SECOND)
-  var next = Calendar.getInstance()
-  var nextSecond = next.get(Calendar.SECOND)
+  //var now = Calendar.getInstance()
+  //var currentSecond = now.get(Calendar.SECOND)
+  //var next = Calendar.getInstance()
+  //var nextSecond = next.get(Calendar.SECOND)
   val shotPerSecond = 2
   var shotNum = 0
   
   var playerLives = 3
   var score = 0
   var wavesCleared = 1
+  
+  var gameOver = false
   
   var lefttouch = false
   var righttouch = false
@@ -67,7 +71,6 @@ object SpaceGameApp extends JFXApp {
           downtouch = true
         }
         if(e.code == KeyCode.Space) {
-          //var nextSecond = currentSecond
           playerbullets += player.shoot
           player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
         }
@@ -87,37 +90,38 @@ object SpaceGameApp extends JFXApp {
           downtouch = false
         }
       }
-            
+      
       var lastTime = 0L
-      val timer = AnimationTimer(time => {
+      val timer:AnimationTimer = AnimationTimer(time => {
         if (lastTime == 0) lastTime = time
         else {
           val interval = (time - lastTime) / 1e9
           lastTime = time
-          
-          //var now = Calendar.getInstance()
-          //var currentSecond = now.get(Calendar.SECOND)
-          
+                    
           g.fill = Color.Black
           g.fillRect(0,0, 1000,1080)
           
           g.fill = Color.White
           g.fillText("LIVES: " + playerLives.toString, 10, 20)
           g.fillText("SCORE: " + score.toString, 10, 40)
-          if(playerLives <= 0) {
-            g.fillText("GAME OVER", 450, 540, 100)
-            lefttouch = false
-            righttouch = false
-            uptouch = false
-            downtouch = false
-          }
-          
+                    
           player.display(g)
           swarm.display(g)
           
           val times = math.random()
           if (times < 0.05) {
             enemybullets += swarm.shoot()
+          }
+          
+          if(playerLives == 0) {
+            gameOver = true
+          }
+          
+          //stop game when player loses all lives
+          if (gameOver) {
+            g.fillText("GAME OVER", 450, 540, 100)
+            g.fillText("FINAL SCORE: " + score.toString, 450, 580, 100)
+            timer.stop
           }
           
           //reset when all enemies removed
