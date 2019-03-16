@@ -33,8 +33,10 @@ object SpaceGameApp extends JFXApp {
   var playerLives = 3
   var score = 0
   var wavesCleared = 1
+  var waveSpeed = 1.0
   
   var gameOver = false
+  //var restartAfter = 0.0
   
   var lefttouch = false
   var righttouch = false
@@ -109,9 +111,34 @@ object SpaceGameApp extends JFXApp {
                     
           player.display(g)
           swarm.display(g)
+          enemybullets.foreach(_.display(g))
+          playerbullets.foreach(_.display(g))
+          enemybullets.foreach(_.timeStep)
+          playerbullets.foreach(_.timeStep)
           
-          val times = math.random()
-          if (times < 0.05) {
+          for(i <- 0 until swarm.enemies.length) {
+            val enemydir = math.random()
+            if (enemydir < 0.5) {
+              swarm.enemies(i).move(new Vec2(10, 0))
+            }
+            if (enemydir > 0.5) {
+              swarm.enemies(i).move(new Vec2(-10, 0))
+            }  
+            if(swarm.enemies(i).showPos.x > 960) {
+              swarm.enemies(i).move(new Vec2(-5, 0))
+            }
+            if(swarm.enemies(i).showPos.x < 0) {
+              swarm.enemies(i).move(new Vec2(5, 0))
+            }
+            swarm.enemies(i).move(new Vec2(0, 1))
+            if(swarm.enemies(i).showPos.y > 1080) {
+              swarm.enemies(i).showPos.y = 0
+            }
+          }
+          
+          //rate of fire of enemyswarm
+          val enemyrof = math.random()
+          if (enemyrof < 0.05) {
             enemybullets += swarm.shoot()
           }
           
@@ -120,7 +147,7 @@ object SpaceGameApp extends JFXApp {
           if(shotCooldown <= 0) {
             shotCooldown = 1.0
             shotAlready = 0
-          }
+          }          
           
           //tracks playerlives
           if(playerLives == 0) {
@@ -131,6 +158,7 @@ object SpaceGameApp extends JFXApp {
           if (gameOver) {
             g.fillText("GAME OVER", 450, 540, 100)
             g.fillText("FINAL SCORE: " + score.toString, 450, 580, 100)
+            g.fillText("RESTART APP TO PLAY AGAIN",450, 620)
             timer.stop
           }
           
@@ -139,13 +167,9 @@ object SpaceGameApp extends JFXApp {
             swarm = new EnemySwarm(3, 10) 
             score += (1000 * wavesCleared)
             wavesCleared += 1
+            waveSpeed += 0.5
           }
-          
-          enemybullets.foreach(_.display(g))
-          playerbullets.foreach(_.display(g))
-          enemybullets.foreach(_.timeStep)
-          playerbullets.foreach(_.timeStep)
-          
+                    
           //remove bullets offscreen
           for(i <- 0 until enemybullets.length) {
             if(enemybullets(i).returnPos.y > 1100 || enemybullets(i).returnPos.y < -100) {

@@ -30,8 +30,6 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
 	 *  @param g - the GraphicsContext to draw into
 	 *  @return none/Unit
 	 */
-  
-  
   def display(g:GraphicsContext) {
     enemies.foreach(_.display(g))
   }
