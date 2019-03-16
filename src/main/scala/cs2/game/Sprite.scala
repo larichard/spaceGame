@@ -38,9 +38,4 @@ class Sprite (protected val img:Image, protected var pos:Vec2) {
     g.drawImage(img, pos.x, pos.y)
   }
   
-  /*def intersection (objectthattouchesthis:Sprite) {
-    this.pos - objectthattouchesthis.pos
-  }
-  */
-  
 }

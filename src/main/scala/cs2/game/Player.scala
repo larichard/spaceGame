@@ -12,8 +12,16 @@ import cs2.util.Vec2
  */
 class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image) 
                 extends Sprite(avatar, initPos) with ShootsBullets {
-
+  
+  //player position and velocity of player movement
   val speed = 8
+  var showPos = initPos
+  
+  //limits player to screen
+  val maxPosX = 1000 - 61
+  val maxPosY = 1080 - 80
+  val minPosX = 0
+  val minPosY = 5
   
   /** moves the player sprite one "step" to the left.  The amount of this 
    *  movement will likely need to be tweaked in order for the movement to feel 
@@ -22,7 +30,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return none/Unit
    */
   def moveLeft() {
-    if(this.initPos.x < 0) {
+    if(this.initPos.x < minPosX) {
       moveRight
     }
     this.move(new Vec2(-speed, 0.0))
@@ -33,7 +41,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return none/Unit
    */
   def moveRight() {
-    if(this.initPos.x > 1000 - 61) {
+    if(this.initPos.x > maxPosY) {
       moveLeft
     }
     this.move(new Vec2(speed, 0.0))
@@ -46,14 +54,14 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    */
   
   def moveUp() {
-    if(this.initPos.y < 5) {
+    if(this.initPos.y < minPosY) {
       moveDown
     }
     this.move(new Vec2(0.0, -speed))
   }
   
   def moveDown() {
-    if(this.initPos.y > 1080 - 80) {
+    if(this.initPos.y > maxPosY) {
       moveUp
     }
     this.move(new Vec2(0.0, speed))
@@ -63,5 +71,4 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
     new Bullet(bulletPic, new Vec2(initPos.x+ 20.5, initPos.y - 20), new Vec2(0, -8))
   }
     
-  def showPos() = this.initPos
 }

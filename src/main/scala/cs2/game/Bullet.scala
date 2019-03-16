@@ -14,7 +14,9 @@ import cs2.util.Vec2
  *  @param vel the initial velocity of the bullet
  */
 class Bullet(pic:Image, initPos:Vec2, private var vel:Vec2) extends Sprite(pic, initPos) {
-
+  
+  //bullet position
+  var returnPos = initPos
   /** advances the position of the Bullet over a single time step
    * 
    *  @return none/Unit
@@ -22,10 +24,5 @@ class Bullet(pic:Image, initPos:Vec2, private var vel:Vec2) extends Sprite(pic, 
     
 	def timeStep():Unit = {
 	  initPos += vel
-	  //new Bullet(pic, initPos + vel, vel)
-	}
-	
-	def returnPos = {
-	  initPos
-	}
+  }
 }

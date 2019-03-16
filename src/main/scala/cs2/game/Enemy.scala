@@ -13,7 +13,9 @@ import cs2.util.Vec2
 class Enemy(pic:Image, initPos:Vec2, private val bulletPic:Image) 
                   extends Sprite(pic, initPos) with ShootsBullets {
   
+  //enemy position
   var showPos = initPos
+  
   /** creates a new Bullet instance beginning from this Enemy, with an appropriate velocity
    * 
    *  @return Bullet - the newly created Bullet object that was fired

@@ -14,12 +14,22 @@ import scala.collection.mutable.Buffer
  */
 class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBullets {
 	
+  //x and y parameters of swarm build
+  var maxBuildY = 400
+  var maxBuildX = 1000
+  var minBuildY = 50
+  var minBuildX = 25
+  
+  //images
   val bulletimg = new Image("file:bullet.png")
   val img = new Image("file:enemy.png")
+  
+  //build of swarm
   var enemies = Buffer[Enemy]()
   for(row <- 0 until nRows) {
     for(col <- 0 until nCols) {
-      var initPos = new Vec2(25 + (1000/nCols * col),50 + (400/nRows * row))
+      //!!! NEED TO ADD TO BUILD ELSEWHERE IF ENEMIES IN SWARM OVERLAP
+      var initPos = new Vec2(minBuildX + (1000/nCols * col), minBuildY + (maxBuildY/nRows * row))
       var b = new Enemy(img, initPos, bulletimg)
       enemies += b
     }
@@ -40,6 +50,7 @@ class EnemySwarm(private val nRows:Int, private val nCols:Int) extends ShootsBul
    *  
    *  @return Bullet - the newly created Bullet object fired from the swarm
    */
+  //shoots bullet at random index of swarm
   def shoot():Bullet = {
     var random = new scala.util.Random
     var ind = random.nextInt(nRows * nCols)

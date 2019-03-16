@@ -21,33 +21,42 @@ import java.util.Calendar
  */
 object SpaceGameApp extends JFXApp {
   
+  //images
   val img = new Image("file:player2.png")
   val bulletimg = new Image("file:bullet.png")
   val backgroundimg_jk = new Image("file:background_jk.png")
   val endscreenimg2 = new Image("file:endscreen2.png")
   
+  //player bullet variables
   val shotMax = 3
   var shotAlready = 0
   var shotCooldown = 1.0
   
+  //tracks score, player lives, # of waves cleared
   var playerLives = 3
   var score = 0
   var wavesCleared = 1
-  var waveSpeed = 1.0
   
+  //rows and columns of swarm
+  var swarmRows = 3
+  var swarmCols = 10
+  var waveNum = wavesCleared - 1
+  
+  //tracks if game is over
   var gameOver = false
-  //var restartAfter = 0.0
   
+  //tracks key inputs of player
   var lefttouch = false
   var righttouch = false
   var uptouch = false
   var downtouch = false
   var spacetouch = false
   
+  //positions at beginning of game
   var enemybullets = Buffer[Bullet]()
   var playerbullets = Buffer[Bullet]()
   var player = new Player(img, new Vec2(470,1000), bulletimg)
-  var swarm = new EnemySwarm(3, 10)
+  var swarm = new EnemySwarm(swarmRows, swarmCols)
 
   stage = new JFXApp.PrimaryStage {
     title = "SPACE"
@@ -70,6 +79,7 @@ object SpaceGameApp extends JFXApp {
           downtouch = true
         }
         if(e.code == KeyCode.Space) {
+          //limits fire rate of player
           if(shotCooldown > 0 && shotAlready < shotMax) {
             playerbullets += player.shoot
             player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
@@ -100,18 +110,23 @@ object SpaceGameApp extends JFXApp {
           val interval = (time - lastTime) / 1e9
           lastTime = time
                     
+          //fill background
           g.fill = Color.Black
           g.fillRect(0,0, 1000,1080)
           
+          //display UI elements
           g.fill = Color.White
           g.fillText("LIVES: " + playerLives.toString, 10, 20)
           g.fillText("SCORE: " + score.toString, 10, 40)
           g.fillText("WAVE: " + wavesCleared.toString, 940, 20, 60)
                     
+          //display objects
           player.display(g)
           swarm.display(g)
           enemybullets.foreach(_.display(g))
           playerbullets.foreach(_.display(g))
+          
+          //give bullets velocity
           enemybullets.foreach(_.timeStep)
           playerbullets.foreach(_.timeStep)
           
@@ -149,12 +164,12 @@ object SpaceGameApp extends JFXApp {
             shotAlready = 0
           }          
           
-          //tracks playerlives
+          //if player lives = 0, gameOver is true
           if(playerLives == 0) {
             gameOver = true
           }
           
-          //stop game when player loses all lives
+          //display end screen and end game when gameOver is true
           if (gameOver) {
             g.drawImage(backgroundimg_jk, 0, 0)
             g.drawImage(endscreenimg2, 1000/2 - 400/2, 0)
@@ -165,12 +180,12 @@ object SpaceGameApp extends JFXApp {
             timer.stop
           }
           
-          //reset when all enemies removed
+          //new swarm when all enemies removed
           if(swarm.enemies.length == 0) {
-            swarm = new EnemySwarm(3, 10) 
+            waveNum += 1
+            swarm = new EnemySwarm(swarmRows + waveNum, swarmCols) 
             score += (1000 * wavesCleared)
             wavesCleared += 1
-            waveSpeed += 0.5
           }
                     
           //remove bullets offscreen
@@ -228,7 +243,7 @@ object SpaceGameApp extends JFXApp {
               }
             }
           }
-          
+          //actions for movement input
           if (lefttouch) {
             player.moveLeft()
             printf(player.showPos.toString + "\n")
