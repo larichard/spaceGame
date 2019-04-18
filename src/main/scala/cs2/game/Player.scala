@@ -19,7 +19,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
   
   //limits player to screen
   val maxPosX = 1000 - 61
-  val maxPosY = 1080 - 80
+  val maxPosY = 930 - 80
   val minPosX = 0
   val minPosY = 5
   
