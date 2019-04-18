@@ -34,6 +34,8 @@ object SpaceGameApp extends JFXApp {
   val playerdamaged = new Image("file:player2damaged.png")
   val playerright = new Image("file:playerright.png")
   val playerleft = new Image("file:playerleft.png")
+  val playerdamagedright = new Image("file:player2damagedright.png")
+  val playerdamagedleft = new Image("file:player2damagedleft.png")
   
   val bulletimg = new Image("file:bullet.png")
   val backgroundimg_jk = new Image("file:background_jk.png")
@@ -490,7 +492,11 @@ object SpaceGameApp extends JFXApp {
           //actions for movement input -- player and specialEnemy
           if (lefttouch) {
             player.moveLeft()
-            player = new Player(playerleft, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            if(damaged) {
+              player = new Player(playerdamagedleft, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            } else {
+              player = new Player(playerleft, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            }
             printf(player.showPos.toString + "\n")
             player.display(g)
             if(numOfSpecial == 1) {
@@ -498,14 +504,22 @@ object SpaceGameApp extends JFXApp {
             }
           } else if (righttouch) {
             player.moveRight()
-            player = new Player(playerright, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            if(damaged) {
+              player = new Player(playerdamagedright, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            } else {
+              player = new Player(playerright, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            }
             printf(player.showPos.toString + "\n")
             player.display(g)
             if(numOfSpecial == 1) {
               specialSwarm.enemies(0).move(new Vec2(-playerspeed/2,0))
             }
           } else {
-            player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            if(damaged) {
+              player = new Player(playerdamaged, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            } else {
+              player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
+            }
           }
           
           if (uptouch) {
