@@ -32,6 +32,9 @@ object SpaceGameApp extends JFXApp {
   
   val img = new Image("file:player2.png")
   val playerdamaged = new Image("file:player2damaged.png")
+  val playerright = new Image("file:playerright.png")
+  val playerleft = new Image("file:playerleft.png")
+  
   val bulletimg = new Image("file:bullet.png")
   val backgroundimg_jk = new Image("file:background_jk.png")
   val endscreenimg2 = new Image("file:endscreen2.png")
@@ -487,21 +490,24 @@ object SpaceGameApp extends JFXApp {
           //actions for movement input -- player and specialEnemy
           if (lefttouch) {
             player.moveLeft()
+            player = new Player(playerleft, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
             printf(player.showPos.toString + "\n")
             player.display(g)
             if(numOfSpecial == 1) {
               specialSwarm.enemies(0).move(new Vec2(playerspeed/2,0))
             }
-          }
-          if (righttouch) {
+          } else if (righttouch) {
             player.moveRight()
+            player = new Player(playerright, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
             printf(player.showPos.toString + "\n")
             player.display(g)
             if(numOfSpecial == 1) {
               specialSwarm.enemies(0).move(new Vec2(-playerspeed/2,0))
             }
-
+          } else {
+            player = new Player(img, new Vec2(player.showPos.x, player.showPos.y), bulletimg)
           }
+          
           if (uptouch) {
             player.moveUp()
             printf(player.showPos.toString + "\n")
@@ -520,7 +526,7 @@ object SpaceGameApp extends JFXApp {
             }
 
           }
-          
+            
         }
       })
       timer.start
