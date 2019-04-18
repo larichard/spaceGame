@@ -41,7 +41,7 @@ class Player(avatar:Image, initPos:Vec2, private val bulletPic:Image)
    *  @return none/Unit
    */
   def moveRight() {
-    if(this.initPos.x > maxPosY) {
+    if(this.initPos.x > maxPosX) {
       moveLeft
     }
     this.move(new Vec2(speed, 0.0))

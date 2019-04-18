@@ -36,6 +36,6 @@ class Sprite (protected val img:Image, protected var pos:Vec2) {
    */
   def display (g:GraphicsContext) {
     g.drawImage(img, pos.x, pos.y)
-  }
+  }  
   
 }
