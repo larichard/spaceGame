@@ -191,7 +191,7 @@ object SpaceGameApp extends JFXApp {
           
           var astRandom = math.random
           var asteroidSpawnX = math.random * 1000
-          if(currAst < maxAst && astRandom <= 0.002) {
+          if(currAst < maxAst && astRandom <= 0.02) {
             asteroidBackground += new Background(asteroidImg, new Vec2(asteroidSpawnX, -300))
             currAst += 1
           }        
@@ -205,7 +205,7 @@ object SpaceGameApp extends JFXApp {
           
           var starRandom = math.random
           var starSpawnX = math.random * 1000
-          if(currStar < maxStar && starRandom < 0.004) {
+          if(currStar < maxStar && starRandom < 0.04) {
             starBackground += new Background(star, new Vec2(starSpawnX, -50))
             currStar += 1
           }
@@ -260,6 +260,14 @@ object SpaceGameApp extends JFXApp {
             specialSwarm.enemies += specialEnemy
           }
           
+          for(i <- 0 until specialSwarm.enemies.length) {
+            specialSwarm.enemies(i).move(new Vec2(0, 0.5))
+            if(specialSwarm.enemies(i).showPos.y > 1080) {
+              specialSwarm.enemies(i).showPos.y = -150
+            }
+          }
+          
+          
           for(j <- 0 until specialSwarm.enemies.length) {
             if(specialSwarm.enemies(j).showPos.x < 0) {
               specialSwarm.enemies(j).move(new Vec2(playerspeed/2, 0))
@@ -269,9 +277,6 @@ object SpaceGameApp extends JFXApp {
             }
             if(specialSwarm.enemies(j).showPos.y < 0) {
               specialSwarm.enemies(j).move(new Vec2(0, playerspeed/2))
-            }
-            if(specialSwarm.enemies(j).showPos.y > 900-150) {
-              specialSwarm.enemies(j).move(new Vec2(0, -playerspeed/2))
             }
           }
           
@@ -366,9 +371,9 @@ object SpaceGameApp extends JFXApp {
             g.drawImage(backgroundimg_jk, 0, 0)
             //g.drawImage(endscreenimg2, 1000/2 - 400/2, 0)
             g.fill = Color.Black
-            g.fillText("GAME OVER", 450, 540, 100)
-            g.fillText("FINAL SCORE: " + score.toString, 450, 580, 100)
-            g.fillText("RESTART APP TO TRY AGAIN", 450, 620)
+            g.fillText("GAME OVER", 450, 200, 100)
+            g.fillText("FINAL SCORE: " + score.toString, 450, 240, 100)
+            g.fillText("RESTART APP TO TRY AGAIN", 450, 280)
             timer.stop
           }
           
@@ -526,21 +531,12 @@ object SpaceGameApp extends JFXApp {
             player.moveUp()
             printf(player.showPos.toString + "\n")
             player.display(g)
-            if(numOfSpecial == 1) {
-              specialSwarm.enemies(0).move(new Vec2(0,playerspeed/2))
-            }
-
           }
           if (downtouch) {
             player.moveDown()
             printf(player.showPos.toString + "\n")
             player.display(g)
-            if(numOfSpecial == 1) {
-              specialSwarm.enemies(0).move(new Vec2(0,-playerspeed/2))
-            }
-
           }
-            
         }
       })
       timer.start
